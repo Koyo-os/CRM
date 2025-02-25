@@ -59,5 +59,31 @@ func (r *UserRepository) GetUsers() ([]models.User, error) {
 
 	return users, nil
 }
+func (r *UserRepository) CheckSuperUser(ID uint64, key string) (bool, error) {
+	var result bson.M
+    err := r.coll.FindOne(r.ctx, bson.M{
+		"id" : ID,
+		"key" : key,
+	}).Decode(&result)
+    if err != nil {
+        if err == mongo.ErrNoDocuments {
+            return false, err
+        } else {
+			return false, err
+        }
+    } else {
+		return true, nil
+	}
+}
 
-func (r *UserRepository) CheckSuperUser(ID uint64, key string)
+func (r *UserRepository) GetUser(id uint64) (*models.User, error) {
+	filter := bson.M{
+		"id" : id,
+	}
+
+	var user models.User
+
+	res := r.coll.FindOne(r.ctx, filter)
+	err := res.Decode(&user)
+	return &user, err
+}

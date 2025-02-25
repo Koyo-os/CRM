@@ -29,4 +29,8 @@ func New(cfg config.Config) (*Repository, error) {
 		Docs: NewDocRepo(client),
 	}, nil
 }
+
+func (r *Repository) CheckDocOnUserPermision(userID, docID uint64) (bool, error) {
+	user, err := r.User.
+}
  
