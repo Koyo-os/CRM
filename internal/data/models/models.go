@@ -8,17 +8,18 @@ type Role struct{
 }
 
 type User struct{
-	ID uint64 `json:"id"`
-	Token string `json:"token"`
-	Firstname string `json:"firstname"`
-	Secondname string `json:"secondname"`
-	Role Role`json:"role"`
+	ID uint64 `json:"id" bson:"id"`
+	Key string `json:"key" bson:"key"`
+	Firstname string `json:"firstname" bson:"firstname"`
+	Secondname string `json:"secondname" bson:"secondname"`
+	Role Role`json:"role" bson:"role"` 
+	SuperUser bool `json:"super_user" bson:"super_user"`
 }
 
 type Document struct{
-	ID uint64 `json:"id"`
-	About string `json:"about"`
-	CreatedAt time.Time `json:"created_at"`
-	Content string `json:"content"`
-	Roles []string  `json:"roles"`
+	ID uint64 `json:"id" bson:"id"`
+	About string `json:"about" bson:"about"` 
+	CreatedAt time.Time `json:"created_at" bson:"created_at"`
+	Content string `json:"content" bson:"content"`
+	Roles []string  `json:"roles" bson:"roles"`
 }

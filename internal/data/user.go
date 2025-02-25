@@ -59,3 +59,5 @@ func (r *UserRepository) GetUsers() ([]models.User, error) {
 
 	return users, nil
 }
+
+func (r *UserRepository) CheckSuperUser(ID uint64, key string)
