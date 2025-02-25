@@ -2,12 +2,17 @@ package models
 
 import "time"
 
+type Role struct{
+	Name string `json:"role_name"`
+	TimeToEnd time.Time
+}
+
 type User struct{
-	ID uint64
-	Token string
-	Firstname string
-	Secondname string
-	Role string
+	ID uint64 `json:"id"`
+	Token string `json:"token"`
+	Firstname string `json:"firstname"`
+	Secondname string `json:"secondname"`
+	Role Role`json:"role"`
 }
 
 type Document struct{
