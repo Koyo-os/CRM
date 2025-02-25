@@ -38,3 +38,24 @@ func (r *UserRepository) DeleteUser(id uint64) error {
 
 	return res.Err()
 }
+
+func (r *UserRepository) GetUsers() ([]models.User, error) {
+	var users []models.User
+	var user models.User
+
+	cursor, err := r.coll.Find(r.ctx, bson.M{})
+	if err != nil{
+		return nil, err
+	}
+
+	for cursor.Next(r.ctx) {
+		cursor.Decode(&user)
+		users = append(users, user)
+	}
+
+	if cursor.Err() != nil{
+		return nil, err
+	}
+
+	return users, nil
+}
