@@ -43,8 +43,10 @@ func (r *Repository) CheckDocOnUserPermision(userID, docID uint64) (bool, error)
 
 	ok := false
 	for _, p := range doc.Roles{
-		if p == user.Role.Name {
-			ok = true
+		for _, d := range user.Role {
+			if p == d.Name {
+				ok = true
+			}
 		}
 	}
 

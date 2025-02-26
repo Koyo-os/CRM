@@ -59,7 +59,7 @@ func (r *UserRepository) GetUsers() ([]models.User, error) {
 
 	return users, nil
 }
-func (r *UserRepository) CheckSuperUser(ID uint64, key string) (bool, error) {
+func (r *UserRepository) CheckUser(ID uint64, key string) (bool, error) {
 	var result bson.M
     err := r.coll.FindOne(r.ctx, bson.M{
 		"id" : ID,

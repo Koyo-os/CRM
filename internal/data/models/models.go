@@ -4,6 +4,7 @@ import "time"
 
 type Role struct{
 	Name string `json:"role_name"`
+	RunningOut bool `json:"running_out" bson:"running_out"`
 	TimeToEnd time.Time
 }
 
@@ -12,7 +13,7 @@ type User struct{
 	Key string `json:"key" bson:"key"`
 	Firstname string `json:"firstname" bson:"firstname"`
 	Secondname string `json:"secondname" bson:"secondname"`
-	Role Role`json:"role" bson:"role"` 
+	Role []Role`json:"role" bson:"role"` 
 	SuperUser bool `json:"super_user" bson:"super_user"`
 }
 
