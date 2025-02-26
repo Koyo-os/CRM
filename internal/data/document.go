@@ -4,6 +4,8 @@ import (
 	"context"
 	"time"
 
+	"github.com/koyo-os/crm/internal/data/models"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -20,5 +22,16 @@ func NewDocRepo(client *mongo.Client) *DocRepository{
 		coll: client.Database("crm").Collection("user"),
 		ctx: ctx,
 	}
+}
+
+func (r *DocRepository) GetDocument(id uint64) (*models.Document, error) {
+	var doc models.Document
+
+	res := r.coll.FindOne(r.ctx, bson.M{
+		"id" : id,
+	})
+
+	err := res.Decode(&doc)
+	return &doc, err
 }
 

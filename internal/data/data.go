@@ -31,6 +31,11 @@ func New(cfg config.Config) (*Repository, error) {
 }
 
 func (r *Repository) CheckDocOnUserPermision(userID, docID uint64) (bool, error) {
-	user, err := r.User.
+	user, err := r.User.GetUser(userID)
+	if err != nil{
+		return false, err
+	}
+
+	
 }
  
