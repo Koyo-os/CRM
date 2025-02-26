@@ -2,6 +2,7 @@ package data
 
 import (
 	"context"
+	"math/rand/v2"
 	"time"
 
 	"github.com/koyo-os/crm/internal/data/models"
@@ -35,3 +36,25 @@ func (r *DocRepository) GetDocument(id uint64) (*models.Document, error) {
 	return &doc, err
 }
 
+func (r *DocRepository) AddDocument(doc *models.Document) (uint64, error) {
+	doc.ID = rand.Uint64()
+	_, err := r.coll.InsertOne(r.ctx, doc)
+	return doc.ID, err
+}
+
+func (r *DocRepository) GetAll() ([]models.Document, error) {
+	var docs []models.Document
+	var doc models.Document
+
+	cursor, err := r.coll.Find(r.ctx, bson.M{})
+	if err != nil{
+		return nil, err
+	}
+
+	for cursor.Next(r.ctx) {
+		cursor.Decode(&doc)
+		docs = append(docs, doc)
+	}
+
+	return docs, cursor.Err()
+}
