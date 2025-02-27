@@ -40,6 +40,8 @@ func (s *Service) GetDocument(Userid, docID uint64,key string) (*models.Document
 	return nil, errors.New("you dont have permitions for this doc")
 }
 
+func (s *Service) AddDocument()
+
 func (s *Service) CheckAllUserRoleTimes() error {
 	now := time.Now().Format(models.TIME_LAYOUT)
 
