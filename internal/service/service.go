@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"time"
 
 	"github.com/koyo-os/crm/internal/data"
 	"github.com/koyo-os/crm/internal/data/models"
@@ -38,5 +39,16 @@ func (s *Service) GetDocument(Userid, docID uint64,key string) (*models.Document
 }
 
 func (s *Service) CheckAllUserRoleTimes() error {
-	users 
+	now := time.Now().Format(models.TIME_LAYOUT)
+
+	users, err := s.Repo.User.GetUsers()
+	if err != nil{
+		return err
+	}
+
+	for _, u := range users {
+		for _, r := range u.Role {
+			
+		}
+	}
 }

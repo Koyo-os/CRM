@@ -2,6 +2,8 @@ package models
 
 import "time"
 
+const TIME_LAYOUT = "02.01.2006"
+
 type Role struct{
 	Name string `json:"role_name"`
 	RunningOut bool `json:"running_out" bson:"running_out"`

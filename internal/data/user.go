@@ -87,3 +87,20 @@ func (r *UserRepository) GetUser(id uint64) (*models.User, error) {
 	err := res.Decode(&user)
 	return &user, err
 }
+
+func (r *UserRepository) DeleteUserRole(UserId uint64, roleName string) error {
+	filter := bson.M{
+		"id" : UserId,
+	}
+
+	update := bson.M{
+		"$pull" : bson.M{
+			"role" : bson.M{
+				"role_name" : roleName,
+			}, 
+		},
+	}
+
+	_, err := r.coll.UpdateOne(r.ctx, filter, update)
+	return err
+}
