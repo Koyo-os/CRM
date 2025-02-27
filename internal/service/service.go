@@ -6,9 +6,11 @@ import (
 
 	"github.com/koyo-os/crm/internal/data"
 	"github.com/koyo-os/crm/internal/data/models"
+	"github.com/koyo-os/crm/pkg/loger"
 )
 
 type Service struct{
+	logger loger.Logger
 	Repo *data.Repository
 }
 
@@ -46,9 +48,17 @@ func (s *Service) CheckAllUserRoleTimes() error {
 		return err
 	}
 
+	s.logger.Info().Msg("starting role timeout check!")
+
 	for _, u := range users {
 		for _, r := range u.Role {
-			
+			if r.TimeToEnd.Format(models.TIME_LAYOUT) == now {
+				if err := s.Repo.User.DeleteUserRole(u.ID, r.Name);err != nil{
+					s.logger.Error().Err(err)
+				}
+			}
 		}
 	}
+
+	return nil
 }
