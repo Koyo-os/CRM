@@ -1,30 +1,27 @@
 package config
 
 import (
-	"io"
 	"os"
-
-	"gopkg.in/yaml.v3"
 )
 
-type Config struct{
-	Port uint64 `yaml:"port"`
-	Host string `yaml:"host"`
-	MongoURL string `yaml:"mongo_url"`
+func getEnv(key string, defaultVal string) string {
+    if value, exists := os.LookupEnv(key); exists {
+	return value
+    }
+
+    return defaultVal
 }
 
-func Load(path string) (*Config, error) {
-	file, err := os.Open(path)
-	if err != nil{
-		return nil, err
-	}
+type Config struct{
+	Port string
+	Host string
+	MongoURL string
+}
 
-	body, err := io.ReadAll(file)
-	if err != nil{
-		return nil, err
+func Load() *Config {
+	return &Config{
+		Port: getEnv("PORT", "8080"),
+		Host: getEnv("HOST", "localhost"),
+		MongoURL: getEnv("MONGO_URL", "mongodb://localhost:27017"),
 	}
-
-	var cfg Config
-	err = yaml.Unmarshal(body, &cfg)
-	return &cfg, err
 }
