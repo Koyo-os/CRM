@@ -83,3 +83,15 @@ func (s *Service) CheckAllUserRoleTimes(ch chan error) {
 	}
 
 }
+
+func (s *Service) DeleteDocument(docid, userid uint64, key string) error {
+	ok, err := s.Repo.User.CheckUser(userid, key)
+	if err != nil{
+		return err
+	}
+
+	permsOk, err := s.Repo.CheckDocOnUserPermision(userid, docid, 'd', 1)
+	if permsOk && ok {
+		return s.Repo.Docs.
+	}
+}
