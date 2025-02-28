@@ -3,8 +3,8 @@ module github.com/koyo-os/crm
 go 1.23.0
 
 require (
+	github.com/rs/zerolog v1.33.0
 	go.mongodb.org/mongo-driver v1.17.2
-	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
@@ -13,7 +13,6 @@ require (
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.19 // indirect
 	github.com/montanaflynn/stats v0.7.1 // indirect
-	github.com/rs/zerolog v1.33.0 // indirect
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
 	github.com/xdg-go/scram v1.1.2 // indirect
 	github.com/xdg-go/stringprep v1.0.4 // indirect

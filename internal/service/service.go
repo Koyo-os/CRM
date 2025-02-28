@@ -61,12 +61,13 @@ func (s *Service) AddDocument(UserID uint64,key string, doc *models.Document) (u
 	}
 }
 
-func (s *Service) CheckAllUserRoleTimes() error {
+func (s *Service) CheckAllUserRoleTimes(ch chan error) {
 	now := time.Now().Format(models.TIME_LAYOUT)
 
 	users, err := s.Repo.User.GetUsers()
 	if err != nil{
-		return err
+		ch <- err
+		return
 	}
 
 	s.logger.Info().Msg("starting role timeout check!")
@@ -81,5 +82,4 @@ func (s *Service) CheckAllUserRoleTimes() error {
 		}
 	}
 
-	return nil
 }
