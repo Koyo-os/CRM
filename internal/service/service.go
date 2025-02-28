@@ -24,13 +24,9 @@ func (s *Service) GetDocument(Userid, docID uint64,key string) (*models.Document
 		return nil, err
 	}
 
-	okPerms,err := s.Repo.CheckDocOnUserPermision(Userid, docID)
+	okPerms,err := s.Repo.CheckDocOnUserPermision(Userid, docID, 'g', 0)
 	if err != nil{
 		return nil, err
-	}
-
-	if ok {
-		return s.Repo.Docs.GetDocument(docID)
 	}
 
 	if ok && okPerms {
@@ -40,7 +36,30 @@ func (s *Service) GetDocument(Userid, docID uint64,key string) (*models.Document
 	return nil, errors.New("you dont have permitions for this doc")
 }
 
-func (s *Service) AddDocument()
+func (s *Service) AddDocument(UserID uint64,key string, doc *models.Document) (uint64, error) {
+	ok, err := s.Repo.User.CheckUser(UserID, key)
+	if err != nil{
+		return 0, err
+	}
+
+	user, err := s.Repo.User.GetUser(UserID)
+	if err != nil{
+		return 0, err
+	}
+
+	can := false 
+	for _, v := range user.Role {
+		if v.CanAddDoc {
+			can = true
+		}
+	}
+
+	if can && ok{
+		return s.Repo.Docs.AddDocument(doc)
+	} else {
+		return 0, errors.New("permition denied")
+	}
+}
 
 func (s *Service) CheckAllUserRoleTimes() error {
 	now := time.Now().Format(models.TIME_LAYOUT)

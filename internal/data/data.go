@@ -30,7 +30,7 @@ func New(cfg config.Config) (*Repository, error) {
 	}, nil
 }
 
-func (r *Repository) CheckDocOnUserPermision(userID, docID uint64) (bool, error) {
+func (r *Repository) CheckDocOnUserPermision(userID, docID uint64, typeRope rune, number uint8) (bool, error) {
 	user, err := r.User.GetUser(userID)
 	if err != nil{
 		return false, err
@@ -44,7 +44,7 @@ func (r *Repository) CheckDocOnUserPermision(userID, docID uint64) (bool, error)
 	ok := false
 	for _, p := range doc.Roles{
 		for _, d := range user.Role {
-			if p == d.Name {
+			if p == d.Name && d.TypeRole[number] == typeRope{
 				ok = true
 			}
 		}
