@@ -91,7 +91,13 @@ func (s *Service) DeleteDocument(docid, userid uint64, key string) error {
 	}
 
 	permsOk, err := s.Repo.CheckDocOnUserPermision(userid, docid, 'd', 1)
-	if permsOk && ok {
-		return s.Repo.Docs.
+	if err != nil{
+		return err
 	}
+	
+	if permsOk && ok {
+		return s.Repo.Docs.Delete(docid)
+	}
+
+	return errors.New("you dont have permition to do it")
 }

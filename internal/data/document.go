@@ -58,3 +58,12 @@ func (r *DocRepository) GetAll() ([]models.Document, error) {
 
 	return docs, cursor.Err()
 }
+
+func (r *DocRepository) Delete(id uint64) error {
+	filter := bson.M{
+		"id" : id,
+	}
+
+	res :=  r.coll.FindOneAndDelete(r.ctx, filter)
+	return res.Err()
+}
