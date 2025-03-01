@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/koyo-os/crm/internal/config"
+	"github.com/koyo-os/crm/internal/data/models"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -53,3 +54,32 @@ func (r *Repository) CheckDocOnUserPermision(userID, docID uint64, typeRope rune
 	return ok, nil
 }
  
+func (r *Repository) GetDocsByUserPermitions(userID uint64) ([]models.Document, error) {
+	var res []models.Document
+
+	docs, err := r.Docs.GetAll()
+	if err != nil{
+		return nil, err
+	}
+
+	user, err := r.User.GetUser(userID)
+	if err != nil{
+		return nil,err
+	}
+
+	for _, d := range docs {
+		can := false
+		for _, r := range user.Role {
+			for _, j := range d.Roles {
+				if r.Name == j {
+					can = true
+				}
+			}
+		}
+		if can {
+			res = append(res, d)
+		}
+	}
+
+	return res, nil
+}
