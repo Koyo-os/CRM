@@ -22,7 +22,12 @@ func New(repo *data.Repository) *Service {
 }
 
 func (s *Service) GetDocument(Userid, docID uint64,key string) (*models.Document, error) {
-	ok, err := s.Repo.User.CheckUser(Userid, key)
+	hash, err := bcrypt.GenerateFromPassword([]byte(key), bcrypt.DefaultCost)
+	if err != nil{
+		return nil,err
+	}
+
+	ok, err := s.Repo.User.CheckUser(Userid, string(hash))
 	if err != nil{
 		return nil, err
 	}
