@@ -7,6 +7,7 @@ import (
 	"github.com/koyo-os/crm/internal/data"
 	"github.com/koyo-os/crm/internal/data/models"
 	"github.com/koyo-os/crm/pkg/loger"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type Service struct{
@@ -100,4 +101,14 @@ func (s *Service) DeleteDocument(docid, userid uint64, key string) error {
 	}
 
 	return errors.New("you dont have permition to do it")
+}
+
+func (s *Service) CreateUser(user *models.User) (uint64, error) {
+	hash, err := bcrypt.GenerateFromPassword([]byte(user.Key), bcrypt.DefaultCost)
+	if err != nil{
+		return 0, err
+	}
+
+	user.Key = string(hash)
+	return s.Repo.User.AddUser(user)
 }
