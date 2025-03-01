@@ -2,8 +2,10 @@ package service
 
 import (
 	"errors"
+	"os"
 	"time"
 
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/koyo-os/crm/internal/data"
 	"github.com/koyo-os/crm/internal/data/models"
 	"github.com/koyo-os/crm/pkg/loger"
@@ -103,12 +105,34 @@ func (s *Service) DeleteDocument(docid, userid uint64, key string) error {
 	return errors.New("you dont have permition to do it")
 }
 
-func (s *Service) CreateUser(user *models.User) (uint64, error) {
+func generateJwt(user *models.User) (string, error) {
+	claims := jwt.MapClaims{
+		"id" : user.ID,
+		"key" : user.Key,
+		"exp" : time.Now().Add(72 * time.Hour).Unix(),
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	return token.SignedString([]byte(os.Getenv("JWT_SEKRET_KEY")))
+}
+
+func (s *Service) CreateUser(user *models.User) (string,uint64, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(user.Key), bcrypt.DefaultCost)
 	if err != nil{
-		return 0, err
+		return "", 0, err
 	}
 
 	user.Key = string(hash)
-	return s.Repo.User.AddUser(user)
+	
+	id, err := s.Repo.User.AddUser(user)
+	if err != nil{
+		return "", 0, err
+	}
+
+	token, err := generateJwt(user)
+	if err != nil{
+		return "", 0, err
+	}
+
+	return token, id, nil
 }
