@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/koyo-os/crm/internal/config"
 	"github.com/koyo-os/crm/internal/data"
 	"github.com/koyo-os/crm/internal/data/models"
 	"github.com/koyo-os/crm/pkg/loger"
@@ -17,8 +18,13 @@ type Service struct{
 	Repo *data.Repository
 }
 
-func New(repo *data.Repository) *Service {
-	return &Service{Repo: repo}
+func New(cfg *config.Config) (*Service, error) {
+	repo, err := data.New(cfg)
+
+	return &Service{
+		Repo: repo,
+		logger: loger.New(),
+	}, err
 }
 
 func (s *Service) GetDocument(Userid, docID uint64,key string) (*models.Document, error) {

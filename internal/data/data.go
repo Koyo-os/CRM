@@ -15,7 +15,7 @@ type Repository struct{
 	Docs *DocRepository
 }
 
-func New(cfg config.Config) (*Repository, error) {
+func New(cfg *config.Config) (*Repository, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10 * time.Second)
 	defer cancel()
 
