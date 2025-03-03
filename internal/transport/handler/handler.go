@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"net/http"
+
 	"github.com/koyo-os/crm/internal/config"
 	"github.com/koyo-os/crm/internal/service"
 	"github.com/koyo-os/crm/pkg/loger"
@@ -19,3 +21,6 @@ func New(cfg *config.Config) (*Handler, error) {
 	}, err
 }
 
+func (h *Handler) RegisterRouters(mux *http.ServeMux){
+	
+}

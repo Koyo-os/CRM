@@ -147,3 +147,16 @@ func (s *Service) CreateUser(user *models.User) (string,uint64, error) {
 
 	return token, id, nil
 }
+
+func (s *Service) GetByRole(userid uint64, key string) ([]models.Document, error){
+	ok, err := s.Repo.User.CheckUser(userid, key)
+	if err != nil{
+		return nil, err
+	}
+
+	if ok {
+		return s.Repo.GetDocsByUserPermitions(userid)
+	}
+
+	return nil, errors.New("who are you?")
+}

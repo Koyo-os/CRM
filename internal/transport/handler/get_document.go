@@ -9,7 +9,7 @@ import (
 	"github.com/koyo-os/crm/internal/data/models"
 )
 
-func (h *Handler) GetDocument(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) getDocument(w http.ResponseWriter, r *http.Request) {
 	claims, ok := r.Context().Value("claims").(*models.Claims)
     if !ok {
         http.Error(w, "claims not found", http.StatusBadRequest)
