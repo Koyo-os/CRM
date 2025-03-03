@@ -5,6 +5,7 @@ import (
 
 	"github.com/koyo-os/crm/internal/config"
 	"github.com/koyo-os/crm/internal/service"
+	"github.com/koyo-os/crm/internal/transport/middleware"
 	"github.com/koyo-os/crm/pkg/loger"
 )
 
@@ -22,5 +23,8 @@ func New(cfg *config.Config) (*Handler, error) {
 }
 
 func (h *Handler) RegisterRouters(mux *http.ServeMux){
-	
+	mux.HandleFunc("/document/add", middleware.Auth(h.addDocument))
+	mux.HandleFunc("/document/get", middleware.Auth(h.getDocument))
+	mux.HandleFunc("/document/delete", middleware.Auth(h.deleteDocument))
+	mux.HandleFunc("/user/create", h.Register)
 }
