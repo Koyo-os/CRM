@@ -47,4 +47,14 @@ func (a *App) Run(ctx context.Context) {
 
 	a.loger.Info().Msg("register routing...")
 	a.handler.RegisterRouters(mux)
+	
+	a.server.Handler = mux
+
+	a.loger.Info().Msg("starting CRM service...")
+	if err := a.server.ListenAndServe();err != nil{
+		a.loger.Error().Err(err)
+		return
+	}
+
+	a.loger.Info().Str("addr", a.server.Addr).Msg("CRM system successfully started!")
 }
