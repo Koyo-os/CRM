@@ -26,5 +26,5 @@ func (h *Handler) RegisterRouters(mux *http.ServeMux){
 	mux.HandleFunc("/document/add", middleware.Auth(h.addDocument))
 	mux.HandleFunc("/document/get", middleware.Auth(h.getDocument))
 	mux.HandleFunc("/document/delete", middleware.Auth(h.deleteDocument))
-	mux.HandleFunc("/user/create", h.Register)
+	mux.HandleFunc("/user/create", h.createUser)
 }

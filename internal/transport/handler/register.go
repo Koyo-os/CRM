@@ -9,7 +9,7 @@ import (
 	"github.com/koyo-os/crm/internal/data/models"
 )
 
-func (h *Handler) Register(w http.ResponseWriter, r *http.Request){
+func (h *Handler) createUser(w http.ResponseWriter, r *http.Request){
 	body, err := io.ReadAll(r.Body)
     if err != nil{
         http.Error(w, "cant read request body", http.StatusBadRequest)
