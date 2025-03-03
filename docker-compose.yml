@@ -24,7 +24,7 @@ services:
       dockerfile: Dockerfile
     container_name: app
     ports:
-      - "8000:8000q"
+      - "8000:8000"
     depends_on:
       rabbitmq:
         condition: service_healthy
