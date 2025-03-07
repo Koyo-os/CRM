@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/koyo-os/crm/internal/config"
 	"github.com/koyo-os/crm/internal/service"
@@ -28,10 +29,17 @@ func Init() *App {
 		return nil
 	}
 
+	checker, err := service.NewChecker(cfg)
+	if err != nil{
+		logger.Error().Err(err)
+		return nil
+	}
+
 	return &App{
 		loger: logger,
 		cfg: cfg,
 		handler: handler,
+		checker: checker,
 		server: &http.Server{
 			Addr: fmt.Sprintf("%s:%s", cfg.Host, cfg.Port),
 		},
@@ -39,6 +47,14 @@ func Init() *App {
 }
 
 func (a *App) Run(ctx context.Context) {
+	ticker := time.NewTicker(24 * time.Hour)
+	defer ticker.Stop()
+
+	go func ()  {
+		for range ticker.C{
+			a.checker.Check()
+		}	
+	}()
 
 	go func ()  {
 		<- ctx.Done()
