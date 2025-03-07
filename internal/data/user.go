@@ -8,6 +8,7 @@ import (
 	"github.com/koyo-os/crm/internal/data/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserRepository struct{
@@ -60,10 +61,15 @@ func (r *UserRepository) GetUsers() ([]models.User, error) {
 	return users, nil
 }
 func (r *UserRepository) CheckUser(ID uint64, key string) (bool, error) {
+	hash, err := bcrypt.GenerateFromPassword([]byte(key), bcrypt.DefaultCost)
+	if err != nil{
+		return false, err
+	}
+
 	var result bson.M
-    err := r.coll.FindOne(r.ctx, bson.M{
+    err = r.coll.FindOne(r.ctx, bson.M{
 		"id" : ID,
-		"key" : key,
+		"key" : hash,
 	}).Decode(&result)
     if err != nil {
         if err == mongo.ErrNoDocuments {
