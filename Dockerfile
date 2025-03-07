@@ -1,22 +1,17 @@
-FROM golang:1.23-alpine AS builder
+FROM golang:1.24.0-bullseye AS builder
 
-WORKDIR /app
+COPY . /workdir
+WORKDIR /workdir
 
-COPY go.mod go.sum ./
+ENV CGO_CPPFLAGS="-D_FORTIFY_SOURCE=2 -fstack-protector-all"
 
-RUN go mod download
+ENV GOFLAGS="-buildmode=pie"
 
+RUN go build -o bin/app cmd/main.go 
 
-COPY . .
+FROM gcr.io/distroless/base-debian11:nonroot
+COPY --from=builder /workdir/app /bin/app
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o /app/bin/microservice ./cmd/main.go
+USER 65534
 
-FROM alpine:latest
-
-WORKDIR /app
-
-COPY --from=builder /app/bin/microservice /app/microservice
-
-EXPOSE 8000
-
-CMD ["./microservice"]
+ENTRYPOINT ["/bin/app"]
