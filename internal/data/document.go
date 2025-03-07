@@ -67,3 +67,18 @@ func (r *DocRepository) Delete(id uint64) error {
 	res :=  r.coll.FindOneAndDelete(r.ctx, filter)
 	return res.Err()
 }
+
+func (r *DocRepository) Update(id uint64, newDocs *models.Document) error {
+	filter := bson.M{
+		"id" : id,
+	}
+
+	update := bson.M{
+		"content" : newDocs.Content,
+		"about" : newDocs.About,
+		"roles" : newDocs.Roles,
+	}
+
+	res := r.coll.FindOneAndUpdate(r.ctx, filter, update)
+	return res.Err()
+}
