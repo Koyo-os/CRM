@@ -33,3 +33,8 @@ type Document struct{
 	Content string `json:"content" bson:"content"`
 	Roles []string  `json:"roles" bson:"roles"`
 }
+
+type UpdateReq struct{
+	ID uint64
+	NewDoc Document
+}
