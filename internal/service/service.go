@@ -160,3 +160,21 @@ func (s *Service) GetByRole(userid uint64, key string) ([]models.Document, error
 
 	return nil, errors.New("who are you?")
 }
+
+func (s *Service) UpdateDoc(userid, docid uint64, key string, new *models.Document) error{
+	ok, err := s.Repo.User.CheckUser(userid, key)
+	if err != nil{
+		return err
+	}
+
+	permsOk,err := s.Repo.CheckDocOnUserPermision(userid, docid, 'u', 2)
+	if err != nil{
+		return err
+	}
+
+	if ok && permsOk {
+		s.Repo.Docs.Update(docid, new)
+	}
+
+	return errors.New("you need some permition")
+}
