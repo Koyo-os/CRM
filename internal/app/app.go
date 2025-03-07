@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/koyo-os/crm/internal/config"
+	"github.com/koyo-os/crm/internal/service"
 	"github.com/koyo-os/crm/internal/transport/handler"
 	"github.com/koyo-os/crm/pkg/loger"
 )
@@ -13,6 +14,7 @@ import (
 type App struct{
 	loger loger.Logger
 	handler *handler.Handler
+	checker *service.Checker
 	cfg *config.Config
 	server *http.Server
 }
@@ -37,6 +39,7 @@ func Init() *App {
 }
 
 func (a *App) Run(ctx context.Context) {
+
 	go func ()  {
 		<- ctx.Done()
 		a.server.Shutdown(ctx)
